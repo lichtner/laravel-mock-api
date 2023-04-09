@@ -2,6 +2,7 @@
 
 namespace Lichtner\MockApi;
 
+use Carbon\Carbon;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
@@ -21,10 +22,11 @@ trait MockApiTrait
             return;
         }
 
-        $mockApi = MockApi::with(['logs' => function ($query) {
+        $mockApi = MockApi::with(['history' => function ($query) {
             $query->where('status', '<', config('mock-api.status'))->limit(1)->latest();
-            if (config('mock-api.until')) {
-                $query->where('created_at', '<', config('mock-api.until'));
+
+            if (config('mock-api.datetime')) {
+                $query->where('created_at', '<', config('mock-api.datetime'));
             }
         }])->where([
             'url' => $url,
@@ -37,9 +39,12 @@ trait MockApiTrait
 
         Http::fake([
             $mockApi->url => Http::response(
-                $mockApi->logs->first()->data,
+                $mockApi->history->first()->data,
                 200,
-                ['mock-api' => 'true']
+                [
+                    'content-type' => $mockApi->history->first()->content_type,
+                    'mock-api' => 'true'
+                ]
             ),
         ]);
     }
@@ -55,13 +60,18 @@ trait MockApiTrait
         }
 
         $mockApi = MockApi::updateOrCreate(
-            ['url' => $url],
-            ['status' => $response->status()],
+            [
+                'url' => $url
+            ], [
+                'status' => $response->status(),
+                'updated_at' => Carbon::now(),
+            ],
         );
 
         MockApiHistory::create([
             'mock_api_id' => $mockApi->id,
             'status' => $response->status(),
+            'content_type' => $response->header('content-type'),
             'data' => $response->body(),
         ]);
     }

@@ -14,7 +14,7 @@ class MockApi extends Model
 
     protected $guarded = [];
 
-    public function logs(): HasMany
+    public function history(): HasMany
     {
         return $this->hasMany(MockApiHistory::class);
     }
