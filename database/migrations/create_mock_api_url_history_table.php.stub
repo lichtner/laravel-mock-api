@@ -15,8 +15,12 @@ return new class extends Migration
             $table->string('content_type');
             $table->mediumText('data');
             $table->timestamp('created_at')->useCurrent();
-            $table->foreign('mock_api_url_id')->references('id')->on('mock_api_url');
             $table->index('created_at');
+            $table->foreign('mock_api_url_id')
+                ->references('id')
+                ->on('mock_api_url')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

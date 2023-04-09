@@ -12,7 +12,7 @@ use Lichtner\MockApi\Models\MockApiUrlHistory;
 trait MockApi
 {
 
-    private static function mockApiUse(string $url): void
+    public static function mockApiUse(string $url): void
     {
         if (!App::environment('local')) {
             return;
@@ -49,7 +49,7 @@ trait MockApi
         ]);
     }
 
-    private static function mockApiLog(string $url, Response $response): void
+    public static function mockApiLog(string $url, Response $response): void
     {
         if (!App::environment('local')) {
             return;
@@ -69,7 +69,7 @@ trait MockApi
         );
 
         MockApiUrlHistory::create([
-            'mock_api_id' => $mockApi->id,
+            'mock_api_url_id' => $mockApi->id,
             'status' => $response->status(),
             'content_type' => $response->header('content-type'),
             'data' => $response->body(),

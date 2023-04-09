@@ -10,7 +10,7 @@ class MockApiUrl extends Model
 {
     use HasFactory;
 
-    protected $table = 'mock_api';
+    protected $table = 'mock_api_url';
 
     protected $guarded = [];
 

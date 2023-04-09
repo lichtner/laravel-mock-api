@@ -9,7 +9,7 @@ class MockApiUrlHistory extends Model
 {
     use HasFactory;
 
-    protected $table = 'mock_api_history';
+    protected $table = 'mock_api_url_history';
 
     protected $guarded = [];
 
