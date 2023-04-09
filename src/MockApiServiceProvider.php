@@ -2,6 +2,7 @@
 
 namespace Lichtner\MockApi;
 
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -19,8 +20,15 @@ class MockApiServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             // ->hasViews()
             ->hasMigrations([
-                'create_mock_api_table',
-                'create_mock_api_history_table',
-            ]);
+                'create_mock_api_url_table',
+                'create_mock_api_url_history_table',
+            ])
+            ->hasInstallCommand(function (InstallCommand $command) {
+                $command
+                    ->publishMigrations()
+                    ->publishConfigFile()
+                    ->askToRunMigrations()
+                    ->askToStarRepoOnGitHub('lichtner/laravel-mock-api');
+            });
     }
 }

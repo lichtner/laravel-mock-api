@@ -5,7 +5,7 @@ namespace Lichtner\MockApi\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MockApiHistory extends Model
+class MockApiUrlHistory extends Model
 {
     use HasFactory;
 

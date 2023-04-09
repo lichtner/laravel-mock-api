@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('mock_api', function (Blueprint $table) {
+        Schema::create('mock_api_url', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('status');
             $table->boolean('use')->default(true);

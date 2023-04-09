@@ -6,10 +6,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
-use Lichtner\MockApi\Models\MockApi;
-use Lichtner\MockApi\Models\MockApiHistory;
+use Lichtner\MockApi\Models\MockApiUrl;
+use Lichtner\MockApi\Models\MockApiUrlHistory;
 
-trait MockApiTrait
+trait MockApi
 {
 
     private static function mockApiUse(string $url): void
@@ -22,7 +22,7 @@ trait MockApiTrait
             return;
         }
 
-        $mockApi = MockApi::with(['history' => function ($query) {
+        $mockApi = MockApiUrl::with(['history' => function ($query) {
             $query->where('status', '<', config('mock-api.status'))->limit(1)->latest();
 
             if (config('mock-api.datetime')) {
@@ -59,7 +59,7 @@ trait MockApiTrait
             return;
         }
 
-        $mockApi = MockApi::updateOrCreate(
+        $mockApi = MockApiUrl::updateOrCreate(
             [
                 'url' => $url
             ], [
@@ -68,7 +68,7 @@ trait MockApiTrait
             ],
         );
 
-        MockApiHistory::create([
+        MockApiUrlHistory::create([
             'mock_api_id' => $mockApi->id,
             'status' => $response->status(),
             'content_type' => $response->header('content-type'),

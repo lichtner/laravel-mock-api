@@ -8,14 +8,14 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('mock_api_history', function (Blueprint $table) {
+        Schema::create('mock_api_url_history', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('mock_api_id');
+            $table->unsignedBigInteger('mock_api_url_id');
             $table->unsignedInteger('status');
             $table->string('content_type');
             $table->mediumText('data');
             $table->timestamp('created_at')->useCurrent();
-            $table->foreign('mock_api_id')->references('id')->on('mock_api');
+            $table->foreign('mock_api_url_id')->references('id')->on('mock_api_url');
             $table->index('created_at');
         });
     }

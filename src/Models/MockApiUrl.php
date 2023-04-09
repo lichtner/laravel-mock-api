@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class MockApi extends Model
+class MockApiUrl extends Model
 {
     use HasFactory;
 
@@ -16,6 +16,6 @@ class MockApi extends Model
 
     public function history(): HasMany
     {
-        return $this->hasMany(MockApiHistory::class);
+        return $this->hasMany(MockApiUrlHistory::class);
     }
 }
