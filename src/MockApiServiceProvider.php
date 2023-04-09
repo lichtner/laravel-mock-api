@@ -4,7 +4,6 @@ namespace Lichtner\MockApi;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Lichtner\MockApi\Commands\MockApiCommand;
 
 class MockApiServiceProvider extends PackageServiceProvider
 {
@@ -18,8 +17,10 @@ class MockApiServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-mock-api')
             ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_laravel-mock-api_table')
-            ->hasCommand(MockApiCommand::class);
+            // ->hasViews()
+            ->hasMigrations([
+                'create_mock_api_table',
+                'create_mock_api_history_table',
+            ]);
     }
 }

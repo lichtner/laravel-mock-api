@@ -8,12 +8,18 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('laravel_mock_api_table', function (Blueprint $table) {
+        Schema::create('mock_api', function (Blueprint $table) {
             $table->id();
-
-            // add fields
-
+            $table->unsignedInteger('status');
+            $table->boolean('use')->default(true);
+            $table->string('url', 500);
             $table->timestamps();
+            $table->unique('url');
         });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('mock_api');
     }
 };

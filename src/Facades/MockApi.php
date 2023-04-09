@@ -5,12 +5,12 @@ namespace Lichtner\MockApi\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Lichtner\MockApi\MockApi
+ * @see \Lichtner\MockApi\MockApiTrait
  */
 class MockApi extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return \Lichtner\MockApi\MockApi::class;
+        return \Lichtner\MockApi\MockApiTrait::class;
     }
 }

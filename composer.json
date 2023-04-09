@@ -45,10 +45,10 @@
     },
     "scripts": {
         "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
-        "analyse": "vendor/bin/phpstan analyse",
-        "test": "vendor/bin/pest",
-        "test-coverage": "vendor/bin/pest --coverage",
-        "format": "vendor/bin/pint"
+        "analyse": "php8.2 vendor/bin/phpstan analyse",
+        "test": "php8.2 vendor/bin/pest",
+        "test-coverage": "php8.2 vendor/bin/pest --coverage",
+        "format": "php8.2 vendor/bin/pint"
     },
     "config": {
         "sort-packages": true,

@@ -1,0 +1,26 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up()
+    {
+        Schema::create('mock_api_history', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('mock_api_id');
+            $table->unsignedInteger('status');
+            $table->mediumText('data');
+            $table->timestamp('created_at')->useCurrent();
+            $table->foreign('mock_api_id')->references('id')->on('mock_api');
+            $table->index('created_at');
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('mock_api_history');
+    }
+};
