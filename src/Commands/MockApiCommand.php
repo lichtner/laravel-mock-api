@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Lichtner\MockApi\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class MockApiCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-mock-api';
 
     public $description = 'My command';
 
