@@ -13,7 +13,10 @@ it('log request to mock api tables', function () {
     assertDatabaseCount('mock_api_url', 0);
     assertDatabaseCount('mock_api_url_history', 0);
 
-    (new class { use MockApi; })::mockApiLog('/users', Http::get('users'));
+    (new class
+    {
+ use MockApi;
+ })::mockApiLog('/users', Http::get('users'));
 
     assertDatabaseCount('mock_api_url', 1);
     assertDatabaseHas('mock_api_url', [
@@ -32,7 +35,10 @@ it('log request to mock api tables', function () {
         'mock-api.use' => true,
     ]);
 
-    (new class { use MockApi; })::mockApiUse('/users');
+    (new class
+    {
+ use MockApi;
+ })::mockApiUse('/users');
 
     $response = Http::get('/users');
 
