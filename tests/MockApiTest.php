@@ -37,8 +37,8 @@ it('log request to mock api tables', function () {
 
     (new class
     {
- use MockApi;
- })::mockApiUse('/users');
+        use MockApi;
+    })::mockApiUse('/users');
 
     $response = Http::get('/users');
 
