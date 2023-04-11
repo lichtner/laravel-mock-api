@@ -11,14 +11,13 @@ use Lichtner\MockApi\Models\MockApiUrlHistory;
 
 trait MockApi
 {
-
     public static function mockApiUse(string $url): void
     {
-        if (!App::environment('local')) {
+        if (! App::environment('local')) {
             return;
         }
 
-        if (!config('mock-api.use')) {
+        if (! config('mock-api.use')) {
             return;
         }
 
@@ -33,7 +32,7 @@ trait MockApi
             'use' => 1,
         ])->first();
 
-        if (!$mockApi) {
+        if (! $mockApi) {
             return;
         }
 
@@ -43,7 +42,7 @@ trait MockApi
                 200,
                 [
                     'content-type' => $mockApi->history->first()->content_type,
-                    'mock-api' => 'true'
+                    'mock-api' => 'true',
                 ]
             ),
         ]);
@@ -51,7 +50,7 @@ trait MockApi
 
     public static function mockApiLog(string $url, Response $response): void
     {
-        if (!App::environment('local')) {
+        if (! App::environment('local')) {
             return;
         }
 
@@ -61,7 +60,7 @@ trait MockApi
 
         $mockApi = MockApiUrl::updateOrCreate(
             [
-                'url' => $url
+                'url' => $url,
             ], [
                 'status' => $response->status(),
                 'updated_at' => Carbon::now(),
@@ -76,4 +75,3 @@ trait MockApi
         ]);
     }
 }
-
