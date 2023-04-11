@@ -17,20 +17,20 @@ class TestCase extends Orchestra
         );
     }
 
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             MockApiServiceProvider::class,
         ];
     }
 
-    public function getEnvironmentSetUp($app)
+    public function getEnvironmentSetUp($app): void
     {
         config()->set('database.default', 'testing');
 
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_laravel-mock-api_table.php.stub';
-        $migration->up();
-        */
+        $migration1 = include __DIR__.'/../database/migrations/create_mock_api_url_table.php.stub';
+        $migration1->up();
+        $migration2 = include __DIR__.'/../database/migrations/create_mock_api_url_history_table.php.stub';
+        $migration2->up();
     }
 }

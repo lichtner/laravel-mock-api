@@ -4,7 +4,6 @@ namespace Lichtner\MockApi;
 
 use Carbon\Carbon;
 use Illuminate\Http\Client\Response;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
 use Lichtner\MockApi\Models\MockApiUrl;
 use Lichtner\MockApi\Models\MockApiUrlHistory;
@@ -13,7 +12,7 @@ trait MockApi
 {
     public static function mockApiUse(string $url): void
     {
-        if (! App::environment('local')) {
+        if (config('app.env') !== 'local') {
             return;
         }
 
@@ -50,7 +49,7 @@ trait MockApi
 
     public static function mockApiLog(string $url, Response $response): void
     {
-        if (! App::environment('local')) {
+        if (config('app.env') !== 'local') {
             return;
         }
 
