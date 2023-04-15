@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Http;
 use Lichtner\MockApi\Models\MockApiUrl;
 use Lichtner\MockApi\Models\MockApiUrlHistory;
 
-trait MockApi
+class MockApi
 {
-    public static function mockApiUse(string $url): void
+    public static function use(string $url): void
     {
         if (config('app.env') !== 'local') {
             return;
@@ -20,34 +20,34 @@ trait MockApi
             return;
         }
 
-        $mockApi = MockApiUrl::with(['history' => function ($query) {
+        $mockApiUrl = MockApiUrl::with(relations: ['history' => function ($query) {
             $query->where('status', '<', config('mock-api.status'))->limit(1)->latest();
 
             if (config('mock-api.datetime')) {
                 $query->where('created_at', '<', config('mock-api.datetime'));
             }
-        }])->where([
+        }])->where(column: [
             'url' => $url,
             'use' => 1,
         ])->first();
 
-        if (! $mockApi) {
+        if (! $mockApiUrl) {
             return;
         }
 
         Http::fake([
-            $mockApi->url => Http::response(
-                $mockApi->history->first()->data,
+            $mockApiUrl->url => Http::response(
+                $mockApiUrl->history->first()->data,
                 200,
                 [
-                    'content-type' => $mockApi->history->first()->content_type,
+                    'content-type' => $mockApiUrl->history->first()?->content_type,
                     'mock-api' => 'true',
                 ]
             ),
         ]);
     }
 
-    public static function mockApiLog(string $url, Response $response): void
+    public static function log(string $url, Response $response): void
     {
         if (config('app.env') !== 'local') {
             return;

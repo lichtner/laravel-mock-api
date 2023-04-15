@@ -6,17 +6,14 @@ use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 use function PHPUnit\Framework\assertEquals;
 
-it('log request to mock api tables', function () {
+it('log request to mock api tables', closure: function () {
     Http::fake([
         'users' => Http::response('users', 200, ['content-type' => 'application/json; charset=utf-8']),
     ]);
     assertDatabaseCount('mock_api_url', 0);
     assertDatabaseCount('mock_api_url_history', 0);
 
-    (new class
-    {
-        use MockApi;
-    })::mockApiLog('/users', Http::get('users'));
+    MockApi::log('/users', Http::get('users'));
 
     assertDatabaseCount('mock_api_url', 1);
     assertDatabaseHas('mock_api_url', [
@@ -35,10 +32,7 @@ it('log request to mock api tables', function () {
         'mock-api.use' => true,
     ]);
 
-    (new class
-    {
-        use MockApi;
-    })::mockApiUse('/users');
+    MockApi::use('/users');
 
     $response = Http::get('/users');
 
