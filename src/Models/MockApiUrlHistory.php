@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $status
  * @property string $content_type
  * @property string $data
+ *
  * @method static create(array $array)
  */
 class MockApiUrlHistory extends Model
