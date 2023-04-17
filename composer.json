@@ -1,10 +1,12 @@
 {
     "name": "lichtner/laravel-mock-api",
-    "description": "Easy and smart mocking external APIs to simplify development",
+    "description": "Easy to use, but the powerful micro library for mocking external API",
     "keywords": [
         "lichtner",
         "laravel",
-        "laravel-mock-api"
+        "laravel-mock-api",
+        "mocking",
+        "api"
     ],
     "homepage": "https://github.com/lichtner/laravel-mock-api",
     "license": "MIT",
