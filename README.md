@@ -116,7 +116,7 @@ Sometimes you may want to develop how your app reacts to error API responses. Ch
 
 ```mysql
 INSERT INTO mock_api_url_history SET 
-    mock_api_url_id=<some-url-id>,
+    mock_api_url_id=12345,
     status=404,
     content_type='application/json',
     data='{"code": 404, "message": "User not found"}'                                  
