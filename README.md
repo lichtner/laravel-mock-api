@@ -69,9 +69,13 @@ HttpMock::get($url);
 
 It is done! Now you can start mocking all your external APIs (and maybe colleagues who are developing them ;-)
 
+## Example application
+
+You can check usage of MockApi in this [example application](https://github.com/lichtner/laravel-mock-api-example)
+
 ## Security 
 
-**By default, MockApi works only on the `local` environment! It does not affect the other ones!**
+By default, MockApi works only on the `local` environment! It does not affect the other ones!
 
 ## Usage
 
@@ -87,7 +91,7 @@ MOCK_API=true
 
 From that moment all external resources will return the last saved successful responses.
 
-After your web services are back, change it to:
+After your web services are back, you can change it to:
 
 ```yaml
 MOCK_API=false
