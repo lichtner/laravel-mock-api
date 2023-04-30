@@ -9,9 +9,10 @@
 
 ## Why?
 
-Are you using external APIs and web services during development that are also in the development process? Are they unstable, slow, sometimes returning incorrect results, or unexpectedly unavailable? Are they causing you difficulties? Me too! That was the reason why I created MockApi.
+Are you using external APIs and web services during development that are also in the development process? Are they unstable, slow, sometimes returning incorrect results, or unexpectedly unavailable? Are they causing you headaches? Me too! That was the reason why I created MockApi.
 
-MockApi solves these problems for you. It saves all GET requests from your external web services, and when they are unavailable, it returns saved data as if it were a real API. You no longer have to worry about it.
+MockApi solves these problems for you. It saves all GET requests from your external web services, and when they are unavailable, it returns saved data like real API. You no longer have to worry about it.
+
 ## Installation
 
 You can install the package via composer:
@@ -45,7 +46,7 @@ class HttpMock
 {
     public static function get($url): Response
     {
-        MockApi::use($url);
+        MockApi::init($url);
 
         $response = Http::get($url);
 
@@ -72,9 +73,9 @@ It is done! Now you can start mocking all your external API (and maybe colleague
 
 ## Security 
 
-**Don't worry MockApi is used only on `local` environment! It has no effect on other ones!**
+**Don't worry. By default MockApi works only on `local` environment! It has no effect on other ones!**
 
-## Mocking management
+## Usage
 
 After you did the changes described in [Setup](#setup) all HTTP GET request will be saved in MockApi tables. But they will not be used. 
 
@@ -87,9 +88,10 @@ When something went wrong and your webservices become unavailable, put in `.env`
 ```yaml
 MOCK_API=true
 ```
+
 from that moment all webservices start returning last saved responses. 
 
-After your webservices are back, and you want to get real responses just change it back:
+After your webservices are back, and you want to get real responses just change it to:
 
 ```yaml
 MOCK_API=false
@@ -97,24 +99,32 @@ MOCK_API=false
 
 ### Mock only some of webservices
 
-In db table `mock_api_url` all rows have in column `use` default value `1`. If you want to mock only 1 or more webservices, set other to `0`. 
+In db table `mock_api_url` all rows have in column `mock` default value `1`. If you want to mock only 1 or more webservices, set other to `0`. 
 
 ### Mock data from the past
 
-By default, MockApi returns last saved responses. But maybe all today's responses are messed up because on the testing server of your webservice was installed code with some bug. But you know yesterday result were fine. So use this:
+By default, MockApi returns last saved success responses (<300). But maybe all today's responses are messed up because on the testing server of your webservice was installed code with some bug. But you know yesterday result were fine. So use this:
 
 ```yaml
 MOCK_API_DATETIME_IS_LESS_THAN="YYYY-MM-DD HH:mm:ss"
 ```
 you get results that are less than given datetime.
 
-### Mock data with different status
+### Mock error requests
 
-Normally you don't need to change that. By default, MockApi returns responses with http code less than 300 (200-299). E.g. if you want to return also redirects use this:
+Sometimes you may want to develop how your app reacts to error API responses. Check table `mock_api_url_history` if there is such a response. If not add desired error response for API e.g:
 
-```yaml
-MOCK_API_STATUS_IS_LESS_THAN=310
+```mysql
+INSERT INTO mock_api_url_history SET 
+    mock_api_url_id=<some-url-id>,
+    status=404,
+    content_type='application/json',
+    data='{"code": 404, "message": "User not found"}'                                  
 ```
+
+Then in `mock_api_url` set `mock_status` = 404.
+
+###
 
 For more information about configuration check [config/mock-api.php](https://github.com/lichtner/laravel-mock-api/blob/main/config/mock-api.php)
 
