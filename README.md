@@ -11,17 +11,15 @@
 
 Are you using external APIs and web services during development that are also in the development process? Are they unstable, slow, sometimes returning incorrect results, or unexpectedly unavailable? Are they causing you headaches? Me too! That was the reason why I created MockApi.
 
-MockApi solves these problems for you. It saves all GET requests from your external web services, and when they are unavailable, it returns saved data like real API. You no longer have to worry about it.
+MockApi solves these problems for you. It saves all GET requests from your external web services, and when they are unavailable, you can return saved data like real API.
 
 ## Installation
-
-You can install the package via composer:
 
 ```bash
 composer require lichtner/laravel-mock-api
 ```
 
-Now you can publish config and run the migrations with:
+Now you can publish config file and run the migrations with:
 
 ```bash
 php artisan mock-api:install
@@ -29,7 +27,7 @@ php artisan mock-api:install
 
 ## Setup
 
-Make simple class which wrap all your `Http::get()` request. Create file e.g.: 
+Make a simple class that wrap all your `Http::get()` requests. Create file e.g.:
 
 `app/HttpMock.php`
 
@@ -57,41 +55,39 @@ class HttpMock
 }
 ```
 
-Now everywhere in your code where you call:
+Everywhere in your code replace :
 
 ```php
 Http::get($url);
 ```
 
-replace it with: 
+with: 
 
 ```php
 HttpMock::get($url);
 ```
 
-It is done! Now you can start mocking all your external API (and maybe colleagues who are developing them ;-)
+It is done! Now you can start mocking all your external APIs (and maybe colleagues who are developing them ;-)
 
 ## Security 
 
-**Don't worry. By default MockApi works only on `local` environment! It has no effect on other ones!**
+**By default, MockApi works only on the `local` environment! It does not affect the other ones!**
 
 ## Usage
 
-After you did the changes described in [Setup](#setup) all HTTP GET request will be saved in MockApi tables. But they will not be used. 
-
-You can manage mocking via environment variables in `.env` file.
+After you did the changes described in [Setup](#setup) all HTTP GET requests will be saved in MockApi tables. But they won't be used.
 
 ### Mock all webservices
 
-When something went wrong and your webservices become unavailable, put in `.env`:
+For returning mocked data add in the `.env` file:
 
 ```yaml
 MOCK_API=true
 ```
 
-from that moment all webservices start returning last saved responses. 
+From that moment all external resources will return the last saved successful responses.
 
-After your webservices are back, and you want to get real responses just change it to:
+After your web services are back, change it to:
 
 ```yaml
 MOCK_API=false
@@ -99,30 +95,26 @@ MOCK_API=false
 
 ### Mock only some of webservices
 
-In db table `mock_api_url` all rows have in column `mock` default value `1`. If you want to mock only 1 or more webservices, set other to `0`. 
+`mock_api_url.mock = 1` means resource is mocked. If you want to mock only some of them, set the others to `0`. 
 
 ### Mock data from the past
 
-By default, MockApi returns last saved success responses (<300). But maybe all today's responses are messed up because on the testing server of your webservice was installed code with some bug. But you know yesterday result were fine. So use this:
-
-```yaml
-MOCK_API_DATETIME_IS_LESS_THAN="YYYY-MM-DD HH:mm:ss"
-```
-you get results that are less than given datetime.
+By default, MockApi returns the last saved successful responses (<300). If some of the resources are wrong, and you know that yesterday's were fine, set in `mock_api_url.mock_before` datetime when they were fine.
 
 ### Mock error requests
 
-Sometimes you may want to develop how your app reacts to error API responses. Check table `mock_api_url_history` if there is such a response. If not add desired error response for API e.g:
+Maybe you want to improve how your app deals with external API errors. You can mock error responses too. Check table `mock_api_url_history` if there is saved such a response from the past. If not, add desired error response for the resource e.g.:
 
 ```mysql
 INSERT INTO mock_api_url_history SET 
     mock_api_url_id=12345,
     status=404,
     content_type='application/json',
-    data='{"code": 404, "message": "User not found"}'                                  
+    data='{"code": 404, "message": "Resource not found"}',
+    created_at=NOW()
 ```
 
-Then in `mock_api_url` set `mock_status` = 404.
+After setting `mock_api_url.mock_status = 404` for that resource you will get this 404 response.
 
 ###
 
@@ -132,7 +124,7 @@ For more information about configuration check [config/mock-api.php](https://git
 
 *Why does MockApi manage only GET requests?*
 
-Because simply I don't know how to deal with the others ;-) Imagine app call (e.g. `PUT /users/7`) and now what? Probably you have to find all GET request at least `GET /users/7` and `GET /users` and update them. But information about that user can also be part of other responses e.g. part of the `GET /profile`, or there are many users and users resource is paginated etc. If you have any suggestion how to deal with POST, PUT, PATCH, DELETE requests start [discussion](https://github.com/lichtner/laravel-mock-api/discussions/new?category=ideas). 
+Because I don't need the other ones ;-) and I don't know how to deal with them ;-) If you have any suggestions on how to deal with POST, PUT, PATCH, DELETE requests start [discussion](https://github.com/lichtner/laravel-mock-api/discussions/new?category=ideas). 
 
 ## Testing
 
@@ -147,7 +139,6 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 ## Credits
 
 - [Marek Lichtner](https://github.com/lichtner)
-- [All Contributors](../../contributors)
 
 ## License
 

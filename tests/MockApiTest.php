@@ -17,8 +17,8 @@ it('log request to mock api tables', closure: function () {
 
     assertDatabaseCount('mock_api_url', 1);
     assertDatabaseHas('mock_api_url', [
-        'status' => 200,
-        'use' => 1,
+        'last_status' => 200,
+        'mock' => 1,
         'url' => '/users',
     ]);
     assertDatabaseCount('mock_api_url_history', 1);
@@ -29,10 +29,10 @@ it('log request to mock api tables', closure: function () {
     ]);
 
     config([
-        'mock-api.use' => true,
+        'mock-api.mock' => true,
     ]);
 
-    MockApi::use('/users');
+    MockApi::init('/users');
 
     $response = Http::get('/users');
 

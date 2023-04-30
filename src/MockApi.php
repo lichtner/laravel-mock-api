@@ -20,9 +20,7 @@ class MockApi
             return;
         }
 
-        $mockApiUrl = MockApiUrl::where('url', $url)
-            ->firstWhere('mock', 1);
-
+        $mockApiUrl = MockApiUrl::where('url', $url)->firstWhere('mock', 1);
         if (! $mockApiUrl) {
             return;
         }
@@ -35,8 +33,8 @@ class MockApi
             $mockApiUrlHistory->where('status', '<', config('mock-api.status'));
         }
 
-        if (config('mock-api.datetime')) {
-            $mockApiUrlHistory->where('created_at', '<', config('mock-api.datetime'));
+        if ($mockApiUrl->mock_before) {
+            $mockApiUrlHistory->where('created_at', '<', $mockApiUrl->mock_before);
         }
 
         $history = $mockApiUrlHistory->latest()->first();

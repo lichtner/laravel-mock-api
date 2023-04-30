@@ -2,12 +2,14 @@
 
 namespace Lichtner\MockApi\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property mixed $id
  * @property int $mock
+ * @property Carbon|null $mock_before
  * @property int $mock_status
  * @property int $last_status
  * @property string $url

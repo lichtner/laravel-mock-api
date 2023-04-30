@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('mock_api_url', function (Blueprint $table) {
             $table->id();
             $table->boolean('mock')->default(true);
+            $table->dateTime('mock_before')->nullable();
             $table->unsignedInteger('mock_status')->nullable();
             $table->unsignedInteger('last_status');
             $table->string('url', 500);

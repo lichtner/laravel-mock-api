@@ -16,25 +16,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Mock API datetime is less than
-    |--------------------------------------------------------------------------
-    |
-    | Without setting this value get the latest request
-    | Setting 'YYYY-MM-DD HH:mm:ss" means return mocked
-    | the latest requests before this datetime
-    */
-
-    'datetime' => env('MOCK_API_DATETIME_IS_LESS_THAN'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Mock API status is less than
     |--------------------------------------------------------------------------
     |
-    | Default 300 means return mocked request with status code 200-299
+    | 300 means return mocked request with status code less than 300 (200-299)
     */
 
-    'status' => env('MOCK_API_STATUS_IS_LESS_THAN', 300),
+    'status' => env('MOCK_API_STATUS', 300),
 
     /*
     |--------------------------------------------------------------------------
