@@ -11,7 +11,7 @@
 
 Are you using external APIs and web services during development that are also in the development process? Are they unstable, slow, sometimes returning incorrect results, or unexpectedly unavailable? Are they causing you headaches? Me too! That was the reason why I created MockApi. It is less than 100 rows but so helpful.
 
-MockApi solves these problems for you. It saves all GET requests from your external web services, and when they are unavailable, you can return saved data like real API.
+MockApi solves these problems for you. It saves all GET requests from your external web services, and when they are unavailable, you can return saved mocked data like real API.
 
 ## Installation
 
@@ -77,7 +77,7 @@ It is done! Now you can start mocking all your external APIs (and maybe colleagu
 
 After you did the changes described in [Setup](#setup) all HTTP GET requests will be saved in MockApi tables. But they won't be used.
 
-### Mock all webservices
+### Mock all resources
 
 For returning mocked data add in the `.env` file:
 
@@ -93,7 +93,7 @@ After your web services are back, change it to:
 MOCK_API=false
 ```
 
-### Mock only some of webservices
+### Mock only some resources
 
 `mock_api_url.mock = 1` means resource is mocked. If you want to mock only some of them, set the others to `0`. 
 
