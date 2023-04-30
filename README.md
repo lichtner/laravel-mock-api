@@ -9,7 +9,7 @@
 
 ## Why?
 
-Are you using external APIs and web services during development that are also in the development process? Are they unstable, slow, sometimes returning incorrect results, or unexpectedly unavailable? Are they causing you headaches? Me too! That was the reason why I created MockApi.
+Are you using external APIs and web services during development that are also in the development process? Are they unstable, slow, sometimes returning incorrect results, or unexpectedly unavailable? Are they causing you headaches? Me too! That was the reason why I created MockApi. It is less than 100 rows but so helpful.
 
 MockApi solves these problems for you. It saves all GET requests from your external web services, and when they are unavailable, you can return saved data like real API.
 
