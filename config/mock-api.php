@@ -32,5 +32,5 @@ return [
     | Use Mock API only on this environment
     */
 
-    'env' =>env('MOCK_API_ENV', 'local'),
+    'env' => env('MOCK_API_ENV', 'local'),
 ];
