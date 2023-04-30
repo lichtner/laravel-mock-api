@@ -12,7 +12,7 @@ class MockApi
 {
     public static function init(string $url): void
     {
-        if (config('app.env') !== 'local') {
+        if (config('app.env') !== config('mock-api.env')) {
             return;
         }
 
@@ -59,7 +59,7 @@ class MockApi
 
     public static function log(string $url, Response $response): void
     {
-        if (config('app.env') !== 'local') {
+        if (config('app.env') !== config('mock-api.env')) {
             return;
         }
 

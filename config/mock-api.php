@@ -35,4 +35,14 @@ return [
     */
 
     'status' => env('MOCK_API_STATUS_IS_LESS_THAN', 300),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Mock API environment
+    |--------------------------------------------------------------------------
+    |
+    | Use Mock API only on this environment
+    */
+
+    'env' =>env('MOCK_API_ENV', 'local'),
 ];
