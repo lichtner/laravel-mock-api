@@ -10,37 +10,47 @@ use Lichtner\MockApi\Models\MockApiUrlHistory;
 
 class MockApi
 {
-    public static function use(string $url): void
+    public static function init(string $url): void
     {
         if (config('app.env') !== 'local') {
             return;
         }
 
-        if (! config('mock-api.use')) {
+        if (! config('mock-api.mock')) {
             return;
         }
 
-        $mockApiUrl = MockApiUrl::with(relations: ['history' => function ($query) {
-            $query->where('status', '<', config('mock-api.status'))->limit(1)->latest();
-
-            if (config('mock-api.datetime')) {
-                $query->where('created_at', '<', config('mock-api.datetime'));
-            }
-        }])->where(column: [
-            'url' => $url,
-            'use' => 1,
-        ])->first();
+        $mockApiUrl = MockApiUrl::where('url', $url)
+            ->firstWhere('mock', 1);
 
         if (! $mockApiUrl) {
             return;
         }
 
+        $mockApiUrlHistory = MockApiUrlHistory::where('mock_api_url_id', $mockApiUrl->id);
+
+        if ($mockApiUrl->mock_status) {
+            $mockApiUrlHistory->where('status', $mockApiUrl->mock_status);
+        } else {
+            $mockApiUrlHistory->where('status', '<', config('mock-api.status'));
+        }
+
+        if (config('mock-api.datetime')) {
+            $mockApiUrlHistory->where('created_at', '<', config('mock-api.datetime'));
+        }
+
+        $history = $mockApiUrlHistory->latest()->first();
+
+        if (! $history) {
+            return;
+        }
+
         Http::fake([
             $mockApiUrl->url => Http::response(
-                $mockApiUrl->history->first()->data,
-                200,
+                $history->data,
+                $history->status,
                 [
-                    'content-type' => $mockApiUrl->history->first()?->content_type,
+                    'content-type' => $history->content_type,
                     'mock-api' => 'true',
                 ]
             ),
@@ -61,7 +71,7 @@ class MockApi
             [
                 'url' => $url,
             ], [
-                'status' => $response->status(),
+                'last_status' => $response->status(),
                 'updated_at' => Carbon::now(),
             ],
         );

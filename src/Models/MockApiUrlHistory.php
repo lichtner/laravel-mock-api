@@ -2,6 +2,7 @@
 
 namespace Lichtner\MockApi\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -9,8 +10,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $status
  * @property string $content_type
  * @property string $data
+ * @property Carbon $created_at
  *
  * @method static create(array $array)
+ * @method static where(string $string, $id): MockApiUrlHistory
  */
 class MockApiUrlHistory extends Model
 {

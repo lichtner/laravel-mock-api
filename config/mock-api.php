@@ -12,7 +12,7 @@ return [
     |  - true - Http makes fake request and returns mock data from mock_api tables
     */
 
-    'use' => env('MOCK_API', false),
+    'mock' => env('MOCK_API', false),
 
     /*
     |--------------------------------------------------------------------------
