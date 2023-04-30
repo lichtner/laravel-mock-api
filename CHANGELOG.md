@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-mock-api` will be documented in this file.
 
+## 0.7.2 - 2023-04-30
+
+fix phpstan only
+
 ## 0.7.1 - 2023-04-30
 
 Update README.md
