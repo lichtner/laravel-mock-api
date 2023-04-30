@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-mock-api` will be documented in this file.
 
+## 0.7.1 - 2023-04-30
+
+Update README.md
+
+- add info about example application
+
 ## 0.7.0 - 2023-04-30
 
 In `mock_api_url` were added:
