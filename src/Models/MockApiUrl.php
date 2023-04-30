@@ -15,8 +15,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $url
  *
  * @method static updateOrCreate(string[] $array, array $array1)
- * @method static where(string $string, string $url): MockApiUrl
- * @method firstWhere(string $string, string $url): MockApiUrl
+ * @method static where(string $string, string $url)
+ * @method MockApiUrl firstWhere(string $string, string $url)
  */
 class MockApiUrl extends Model
 {
