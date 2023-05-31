@@ -93,7 +93,7 @@ class MockApi
             'mock_api_url_id' => $mockApi->id,
             'status' => $response->status(),
             'content_type' => $response->header('content-type'),
-            ...($method === 'GET' ? ['data' =>  $response->body()] : []),
+            ...($method === 'GET' ? ['data' => $response->body()] : []),
         ]);
     }
 }
