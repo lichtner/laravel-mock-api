@@ -9,9 +9,9 @@
 
 ## Why?
 
-Are you using external APIs and web services during development that are also in the development process? Are they unstable, slow, sometimes returning incorrect results, or unexpectedly unavailable? Are they causing you headaches? Me too! That was the reason why I created MockApi. It is less than 100 rows but so helpful.
+Are you using external APIs and web services during development that are also in the development process? Are they unstable, slow, sometimes returning incorrect results, or unexpectedly unavailable? Are they causing you headaches? Me too! That was the reason why I created MockApi. It is small but so helpful.
 
-MockApi solves these problems for you. It saves all GET requests from your external web services, and when they are unavailable, you can return saved mocked data like real API.
+MockApi solves these problems for you. It saves all requests from your external web services, and when they are unavailable, you can return saved mocked data like real API.
 
 ## Installation
 
@@ -27,7 +27,9 @@ php artisan mock-api:install
 
 ## Setup
 
-Make a simple class that wrap all your `Http::get()` requests. Create file e.g.:
+### Mocking GET request
+
+Make a simple class that wrap all your `Http::get()` requests  e.g.:
 
 `app/HttpMock.php`
 
@@ -55,7 +57,7 @@ class HttpMock
 }
 ```
 
-Everywhere in your code replace :
+Then everywhere in your code replace:
 
 ```php
 Http::get($url);
@@ -67,11 +69,50 @@ with:
 HttpMock::get($url);
 ```
 
-It is done! Now you can start mocking all your external APIs (and maybe colleagues who are developing them ;-)
+It is done! Now you can start mocking all your external APIs GET requests (and maybe colleagues who are developing them ;-)
+
+### Mocking POST, PUT, PATCH, DELETE request
+
+You can also mock mutation requests too, but it is not necessary if you don't need to. 
+
+E.g. for mocking POST requests add this in `app/HttpMock.php`
+
+```php
+class HttpMock
+{
+    /* ... here is function get() */
+
+    public static function post(string $url, array $data): Response
+    {
+        MockApi::init($url, $data, 'POST');
+
+        $response = Http::post($url, $data);
+
+        MockApi::log($url, $response, 'POST');
+
+        return $response;
+    }
+}
+```
+
+Then everywhere in your code replace:
+
+```php
+Http::post($url);
+```
+
+with:
+
+```php
+HttpMock::post($url);
+```
+
+Mocking other HTTP methods are very similar. Check in example application file [/app/HttpMock.php](https://github.com/lichtner/laravel-mock-api-example/blob/main/app/HttpMock.php) 
+
 
 ## Example application
 
-You can check usage of MockApi in this [example application](https://github.com/lichtner/laravel-mock-api-example)
+You can check full usage of MockApi in [example application](https://github.com/lichtner/laravel-mock-api-example)
 
 ## Security 
 
@@ -79,17 +120,21 @@ By default, MockApi works only on the `local` environment! It does not affect th
 
 ## Usage
 
-After you did the changes described in [Setup](#setup) all HTTP GET requests will be saved in MockApi tables. But they won't be used.
+After you did the changes described in [Setup](#setup), all HTTP requests will be saved in MockApi tables. But they won't be used.
 
 ### Mock all resources
 
-For returning mocked data add in the `.env` file:
+For returning mocked data add this in the `.env` file:
 
 ```yaml
 MOCK_API=true
 ```
 
-From that moment all external resources will return the last saved successful responses.
+From that moment all external resources will return the last saved successful responses. 
+
+You can set `MOCK_API=true` immediately after installation. From that moment all external resources will return the last saved successful responses. 
+
+If you try to request resource which has not been saved yet, first a real request is made and saved in mock api tables, and then returned.
 
 After your web services are back, you can change it to:
 
@@ -97,13 +142,17 @@ After your web services are back, you can change it to:
 MOCK_API=false
 ```
 
+## Mock management
+
+You can manage your mocks in tables `mock_api_url` and `mock_api_url`.
+
 ### Mock only some resources
 
-`mock_api_url.mock = 1` means resource is mocked. If you want to mock only some of them, set the others to `0`. 
+By default is in table set `mock_api_url.mock = 1`. It means resource is mocked. If you want to mock only some of them, set the others to `0`. 
 
 ### Mock data from the past
 
-By default, MockApi returns the last saved successful responses (<300). If some of the resources are wrong, and you know that yesterday's were fine, set in `mock_api_url.mock_before` datetime when they were fine.
+By default, MockApi returns the last saved successful responses (status < 300). If some of the resources are wrong, and you know that yesterday's were fine, set in table `mock_api_url.mock_before` datetime when they were fine for all incorrect resources.
 
 ### Mock error requests
 
@@ -118,17 +167,74 @@ INSERT INTO mock_api_url_history SET
     created_at=NOW()
 ```
 
-After setting `mock_api_url.mock_status = 404` for that resource you will get this 404 response.
+After setting in table `mock_api_url.mock_status = 404` for that resource you will get this 404 response.
 
-###
+### Mock mutation requests
+
+Mutation requests POST, PUT, PATCH, DELETE don't put anything in `mock_api_url_history.data` field. Without any changes they returns same data, you send them. E.g. for:
+
+```php
+$response = HttpMock::post("$api/articles", [
+        'userId' => 1,
+        'title' => 'title 1',
+        'body' => 'body 1',
+    ]);
+```
+
+response is:
+
+```json
+{
+    "userId": 1,
+    "title": "title 1",
+    "body": "body 1"
+}
+```
+
+Especially for POST request your real API create article and add `id` field. To simulate this behaviour you can do update field `data` for specific row:
+
+```mysql
+UPDATE mock_api_url_history SET data='{"id": 1234}' WHERE id = xxx;
+```
+
+Then same requests response will be:
+
+```json
+{
+    "userId": 1,
+    "title": "title 1",
+    "body": "body 1",
+    "id": 1234
+}
+```
+
+You can add anything in mutation responses (e.g. uuid, etc.). These fields will be merged recursively with your json POST data. 
+
+### Mock requests with same url and method
+
+In table `mock_api_url` is set unique key for (method, url) so you are not able to mock two request with same method and url which is expected behavior. But for specific situation you want to. Maybe you want to mock two different articles with different titles with resource `POST /articles`. To do this you can create special class for that purpose.
+
+```php
+class HttpMockArticles
+{
+    public static function post(string $url, array $data): Response
+    {
+        MockApi::init("$url/$data[title]", $data, 'POST');
+        
+        $response = Http::post($url, $data);
+        
+        MockApi::log("$url/$data[title]", $response, 'POST');
+
+        return $response;
+    }
+}
+```
+
+As you can see you can modify `$url` parameter only for `MockApi::init()` and `MockApi::log()` functions, but not for real request `Http::post()`. So two articles with different titles will be saved.
+
+## Config 
 
 For more information about configuration check [config/mock-api.php](https://github.com/lichtner/laravel-mock-api/blob/main/config/mock-api.php)
-
-## FAQ
-
-*Why does MockApi manage only GET requests?*
-
-Because I don't need the other ones ;-) and I don't know how to deal with them ;-) If you have any suggestions on how to deal with POST, PUT, PATCH, DELETE requests start [discussion](https://github.com/lichtner/laravel-mock-api/discussions/new?category=ideas). 
 
 ## Testing
 

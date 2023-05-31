@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $mock_before
  * @property int $mock_status
  * @property int $last_status
+ * @property string $method
  * @property string $url
  *
  * @method static updateOrCreate(string[] $array, array $array1)

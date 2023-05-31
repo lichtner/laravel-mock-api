@@ -10,7 +10,7 @@ use Lichtner\MockApi\Models\MockApiUrlHistory;
 
 class MockApi
 {
-    public static function init(string $url): void
+    public static function init(string $url, string|array $data = null, string $method = 'GET'): void
     {
         if (config('app.env') !== config('mock-api.env')) {
             return;
@@ -20,7 +20,11 @@ class MockApi
             return;
         }
 
-        $mockApiUrl = MockApiUrl::where('url', $url)->firstWhere('mock', 1);
+        $method = strtoupper($method);
+
+        $mockApiUrl = MockApiUrl::where('url', $url)
+            ->where('method', $method)
+            ->firstWhere('mock', 1);
         if (! $mockApiUrl) {
             return;
         }
@@ -43,9 +47,17 @@ class MockApi
             return;
         }
 
+        if (is_string($data)) {
+            $data .= $history->data;
+        }
+        if (is_array($data) && str_contains($history->content_type, 'application/json')) {
+            $merge = json_decode($history->data, true) ?? [];
+            $data = array_merge_recursive($data, $merge);
+        }
+
         Http::fake([
             $mockApiUrl->url => Http::response(
-                $history->data,
+                $data,
                 $history->status,
                 [
                     'content-type' => $history->content_type,
@@ -55,7 +67,7 @@ class MockApi
         ]);
     }
 
-    public static function log(string $url, Response $response): void
+    public static function log(string $url, Response $response, string $method = 'GET'): void
     {
         if (config('app.env') !== config('mock-api.env')) {
             return;
@@ -65,8 +77,11 @@ class MockApi
             return;
         }
 
+        $method = strtoupper($method);
+
         $mockApi = MockApiUrl::updateOrCreate(
             [
+                'method' => $method,
                 'url' => $url,
             ], [
                 'last_status' => $response->status(),
@@ -78,7 +93,7 @@ class MockApi
             'mock_api_url_id' => $mockApi->id,
             'status' => $response->status(),
             'content_type' => $response->header('content-type'),
-            'data' => $response->body(),
+            ...($method === 'GET' ? ['data' =>  $response->body()] : []),
         ]);
     }
 }

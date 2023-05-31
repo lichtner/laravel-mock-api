@@ -14,14 +14,15 @@ return new class extends Migration
             $table->dateTime('mock_before')->nullable();
             $table->unsignedInteger('mock_status')->nullable();
             $table->unsignedInteger('last_status');
+            $table->string('method', 10);
             $table->string('url', 500);
             $table->timestamps();
-            $table->unique('url');
+            $table->unique(['method', 'url']);
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('mock_api');
+        Schema::dropIfExists('mock_api_url');
     }
 };

@@ -13,7 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('mock_api_url_id');
             $table->unsignedInteger('status');
             $table->string('content_type');
-            $table->mediumText('data');
+            $table->mediumText('data')->default('');
             $table->timestamp('created_at')->useCurrent();
             $table->index('created_at');
             $table->foreign('mock_api_url_id')
@@ -26,6 +26,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('mock_api_history');
+        Schema::dropIfExists('mock_api_url_history');
     }
 };
