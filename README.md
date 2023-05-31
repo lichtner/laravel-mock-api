@@ -71,7 +71,7 @@ HttpMock::get($url);
 
 It is done! Now you can start mocking all your external APIs GET requests (and maybe colleagues who are developing them ;-)
 
-### Mocking POST, PUT, PATCH, DELETE request
+### Mocking POST, PUT, PATCH, DELETE requests
 
 You can also mock mutation requests too, but it is not necessary if you don't need to. 
 
@@ -130,8 +130,6 @@ For returning mocked data add this in the `.env` file:
 MOCK_API=true
 ```
 
-From that moment all external resources will return the last saved successful responses. 
-
 You can set `MOCK_API=true` immediately after installation. From that moment all external resources will return the last saved successful responses. 
 
 If you try to request resource which has not been saved yet, first a real request is made and saved in mock api tables, and then returned.
@@ -144,15 +142,15 @@ MOCK_API=false
 
 ## Mock management
 
-You can manage your mocks in tables `mock_api_url` and `mock_api_url`.
+You can manage your mocks in tables `mock_api_url` and `mock_api_url_history`.
 
 ### Mock only some resources
 
-By default is in table set `mock_api_url.mock = 1`. It means resource is mocked. If you want to mock only some of them, set the others to `0`. 
+By default, is in table set `mock_api_url.mock = 1`. It means resource is mocked. If you want to mock only some of them, set the others to `0`. 
 
 ### Mock data from the past
 
-By default, MockApi returns the last saved successful responses (status < 300). If some of the resources are wrong, and you know that yesterday's were fine, set in table `mock_api_url.mock_before` datetime when they were fine for all incorrect resources.
+By default, MockApi returns the last saved successful responses (status < 300). If some of the resources are wrong, and yesterday's were fine, set in table `mock_api_url.mock_before` datetime for all incorrect resources.
 
 ### Mock error requests
 
@@ -171,7 +169,7 @@ After setting in table `mock_api_url.mock_status = 404` for that resource you wi
 
 ### Mock mutation requests
 
-Mutation requests POST, PUT, PATCH, DELETE don't put anything in `mock_api_url_history.data` field. Without any changes they returns same data, you send them. E.g. for:
+Mutation requests like POST, PUT, PATCH, DELETE don't put anything in `mock_api_url_history.data` field. Without any changes they returns same data, you send them. E.g. for:
 
 ```php
 $response = HttpMock::post("$api/articles", [
@@ -191,10 +189,10 @@ response is:
 }
 ```
 
-Especially for POST request your real API create article and add `id` field. To simulate this behaviour you can do update field `data` for specific row:
+Especially for POST request your real API add probably `id` field. To simulate this behaviour you can do update field `data` for specific row:
 
 ```mysql
-UPDATE mock_api_url_history SET data='{"id": 1234}' WHERE id = xxx;
+UPDATE mock_api_url_history SET data='{"id": 1234}' WHERE id = 777;
 ```
 
 Then same requests response will be:
