@@ -20,11 +20,10 @@ class MockApi
             return;
         }
 
-        $method = strtoupper($method);
-
         $mockApiUrl = MockApiUrl::where('url', $url)
-            ->where('method', $method)
+            ->where('method', strtoupper($method))
             ->firstWhere('mock', 1);
+
         if (! $mockApiUrl) {
             return;
         }

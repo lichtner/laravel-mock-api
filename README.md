@@ -98,13 +98,13 @@ class HttpMock
 Then everywhere in your code replace:
 
 ```php
-Http::post($url);
+Http::post($url, $data);
 ```
 
 with:
 
 ```php
-HttpMock::post($url);
+HttpMock::post($url, $data);
 ```
 
 Mocking other HTTP methods are very similar. Check in example application file [/app/HttpMock.php](https://github.com/lichtner/laravel-mock-api-example/blob/main/app/HttpMock.php) 
@@ -150,7 +150,7 @@ By default, is in table set `mock_api_url.mock = 1`. It means resource is mocked
 
 ### Mock data from the past
 
-By default, MockApi returns the last saved successful responses (status < 300). If some of the resources are wrong, and yesterday's were fine, set in table `mock_api_url.mock_before` datetime for all incorrect resources.
+By default, MockApi returns the last saved successful responses (status < 300). If some of the resources returns status 2000 with some data, but they are incorrect, and yesterday's were fine, set in table `mock_api_url.mock_before` datetime for all incorrect resources.
 
 ### Mock error requests
 
@@ -173,7 +173,7 @@ Mutation requests like POST, PUT, PATCH, DELETE don't put anything in `mock_api_
 
 ```php
 $response = HttpMock::post("$api/articles", [
-        'userId' => 1,
+        'userId' => 5,
         'title' => 'title 1',
         'body' => 'body 1',
     ]);
@@ -183,13 +183,13 @@ response is:
 
 ```json
 {
-    "userId": 1,
+    "userId": 5,
     "title": "title 1",
     "body": "body 1"
 }
 ```
 
-Especially for POST request your real API add probably `id` field. To simulate this behaviour you can do update field `data` for specific row:
+Especially for POST request your real API probably add `id` field. To simulate this behaviour you can update field `data` for specific row:
 
 ```mysql
 UPDATE mock_api_url_history SET data='{"id": 1234}' WHERE id = 777;
@@ -199,7 +199,7 @@ Then same requests response will be:
 
 ```json
 {
-    "userId": 1,
+    "userId": 5,
     "title": "title 1",
     "body": "body 1",
     "id": 1234
@@ -208,7 +208,7 @@ Then same requests response will be:
 
 You can add anything in mutation responses (e.g. uuid, etc.). These fields will be merged recursively with your json POST data. 
 
-### Mock requests with same url and method
+### Mock two requests with same url and method
 
 In table `mock_api_url` is set unique key for (method, url) so you are not able to mock two request with same method and url which is expected behavior. But for specific situation you want to. Maybe you want to mock two different articles with different titles with resource `POST /articles`. To do this you can create special class for that purpose.
 
