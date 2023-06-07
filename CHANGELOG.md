@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-mock-api` will be documented in this file.
 
+## 0.8.0 - 2023-06-07
+
+Add possibility to mock post, put, patch, delete requests
+
 ## 0.7.2 - 2023-04-30
 
 fix phpstan only
