@@ -1,6 +1,6 @@
 # Laravel MockApi
 
-*Easy to use, but the powerful micro library for mocking external API*
+*Laravel MockAPI is a powerful yet lightweight library designed for mocking external APIs and web services.*
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/lichtner/laravel-mock-api.svg?style=flat-square)](https://packagist.org/packages/lichtner/laravel-mock-api)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/lichtner/laravel-mock-api/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/lichtner/laravel-mock-api/actions?query=workflow%3Arun-tests+branch%3Amain)
@@ -9,9 +9,9 @@
 
 ## Why?
 
-Are you using external APIs and web services during development that are also in the development process? Are they unstable, slow, sometimes returning incorrect results, or unexpectedly unavailable? Are they causing you headaches? Me too! That was the reason why I created MockApi. It is small but so helpful.
+Are you using external APIs and web services during development that are also undergoing development? Are they unstable, slow, occasionally returning incorrect results, or unexpectedly unavailable? Are they causing you headaches? Me too! That was the reason why I created MockApi.
 
-MockApi solves these problems for you. It saves all requests from your external web services, and when they are unavailable, you can return saved mocked data like real API.
+After installation and setup, MockApi will save all requests from your external web services in the background, and when they are unavailable, return them just like real APIs.
 
 ## Installation
 
