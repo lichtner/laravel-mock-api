@@ -8,7 +8,11 @@ use function PHPUnit\Framework\assertEquals;
 
 it('log request to mock api tables', closure: function () {
     Http::fake([
-        'users' => Http::response('users', 200, ['content-type' => 'application/json; charset=utf-8']),
+        'users' => Http::response(
+            '{"data":"users"}',
+            200,
+            ['content-type' => 'application/json; charset=utf-8']
+        ),
     ]);
     assertDatabaseCount('mock_api_url', 0);
     assertDatabaseCount('mock_api_url_history', 0);
@@ -19,13 +23,14 @@ it('log request to mock api tables', closure: function () {
     assertDatabaseHas('mock_api_url', [
         'last_status' => 200,
         'mock' => 1,
+        'method' => 'GET',
         'url' => '/users',
     ]);
     assertDatabaseCount('mock_api_url_history', 1);
     assertDatabaseHas('mock_api_url_history', [
         'status' => 200,
         'content_type' => 'application/json; charset=utf-8',
-        'data' => 'users',
+        'data' => '{"data":"users"}',
     ]);
 
     config([
@@ -36,6 +41,6 @@ it('log request to mock api tables', closure: function () {
 
     $response = Http::get('/users');
 
-    assertEquals('users', $response->body());
+    assertEquals('{"data":"users"}', $response->body());
     assertEquals('application/json; charset=utf-8', $response->header('content-type'));
 });

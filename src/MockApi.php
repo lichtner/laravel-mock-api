@@ -10,7 +10,7 @@ use Lichtner\MockApi\Models\MockApiUrlHistory;
 
 class MockApi
 {
-    public static function init(string $url, string|array $data = null, string $method = 'GET'): void
+    public static function init(string $url, string|array $data = '', string $method = 'GET'): void
     {
         if (config('app.env') !== config('mock-api.env')) {
             return;
