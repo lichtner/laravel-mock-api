@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-mock-api` will be documented in this file.
 
+## 0.8.2 - 2023-06-12
+
+docs: update README.md
+
 ## 0.8.1 - 2023-06-12
 
 fix: MockApi::init()
