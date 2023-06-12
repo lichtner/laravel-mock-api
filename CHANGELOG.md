@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-mock-api` will be documented in this file.
 
+## 0.8.1 - 2023-06-12
+
+fix: MockApi::init()
+
 ## 0.8.0 - 2023-06-07
 
 Add possibility to mock post, put, patch, delete requests
