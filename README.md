@@ -150,7 +150,7 @@ By default, is in table set `mock_api_url.mock = 1`. It means resource is mocked
 
 ### Mock data from the past
 
-By default, MockApi returns the last saved successful responses (status < 300). If some of the resources returns status 2000 with some data, but they are incorrect, and yesterday's were fine, set in table `mock_api_url.mock_before` datetime for all incorrect resources.
+By default, MockApi returns the last saved successful responses (status < 300). If some of the resources returns status 200 with some data, but they are incorrect, and yesterday's were fine, set in table `mock_api_url.mock_before` datetime for all incorrect resources.
 
 ### Mock error requests
 
